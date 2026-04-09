@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+
+# Local databases and runtime artifacts
+*.db
+
+# Secrets / credentials
+credentials.json
+token.pickle
+*.pem
+*.key
+*.secret
+
+# macOS
+.DS_Store
