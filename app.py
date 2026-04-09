@@ -8,7 +8,6 @@ import subprocess
 from pathlib import Path
 import yt_dlp
 import whisper
-from openai import OpenAI
 
 # Google Drive API
 from google.auth.transport.requests import Request
@@ -349,49 +348,10 @@ def create_wav_from_mp4(mp4_path, video_folder, real_title):
 
 
 def correct_transcript_with_gpt(raw_transcript, api_key):
-    """🤖 GPT ile transcript'teki yazım hatalarını düzelt"""
-    print(f"   🤖 GPT ile yazım hataları düzeltiliyor...")
-    
-    try:
-        client = OpenAI(api_key=api_key)
-        
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": """Sen Türkçe metin düzeltme uzmanısın. 
-                    
-Görevin: Speech-to-text (Whisper) tarafından oluşturulan Türkçe transcript'lerdeki yazım hatalarını düzeltmek.
-
-ÖNEMLİ KURALLAR:
-1. SADECE yazım hatalarını düzelt (yanlış yazılmış kelimeler, isimler, fiiller)
-2. Metni KISA veya YENİDEN YAZMAYA ÇALIŞMA - sadece hataları düzelt
-3. Cümle yapısını ve anlamını DEĞİŞTİRME
-4. Noktalama işaretlerini DÜZELTME - aynen koru
-5. Özel isimleri doğru yaz (örn: "Ekrem imamol" → "Ekrem İmamoğlu")
-6. Yanlış duyulan fiilleri düzelt (örn: "kürekle yardı" → "kürekle aldı")
-7. Hatalı birleşik/ayrı yazılan kelimeleri düzelt (örn: "cumhur başkanı" → "Cumhurbaşkanı")
-
-Çıktı: Sadece düzeltilmiş metni döndür, açıklama ekleme."""
-                },
-                {
-                    "role": "user",
-                    "content": f"Bu transcript'teki yazım hatalarını düzelt:\n\n{raw_transcript}"
-                }
-            ],
-            temperature=0.3,
-            max_tokens=4000
-        )
-        
-        corrected_text = response.choices[0].message.content.strip()
-        print(f"   ✅ GPT düzeltmesi tamamlandı")
-        return corrected_text
-        
-    except Exception as e:
-        print(f"   ⚠️ GPT düzeltme hatası: {e}")
-        print(f"   ℹ️ Orijinal transcript kullanılacak")
-        return raw_transcript
+    """OpenAI API integration disabled; returns placeholder instruction."""
+    print("   ⚠️ Ücretli API çağrısı kaldırıldı.")
+    print("   ℹ️ Bu alanı kullanmak için: enter your openai api")
+    return "enter your openai api"
 
 
 def create_transcript(video_folder, real_title, json_title, wav_path):
