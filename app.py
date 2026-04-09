@@ -347,7 +347,7 @@ def create_wav_from_mp4(mp4_path, video_folder, real_title):
         return None
 
 
-def correct_transcript_with_gpt(raw_transcript, api_key):
+def correct_transcript_with_gpt(raw_transcript):
     """OpenAI API integration disabled; returns placeholder instruction."""
     print("   ⚠️ Ücretli API çağrısı kaldırıldı.")
     print("   ℹ️ Bu alanı kullanmak için: enter your openai api")
@@ -377,15 +377,7 @@ def create_transcript(video_folder, real_title, json_title, wav_path):
             f.write(raw_text)
         print(f"   ✅ Ham transcript kaydedildi")
         
-        api_key = os.getenv('OPENAI_API_KEY')
-        
-        if not api_key:
-            print(f"   ⚠️ OPENAI_API_KEY bulunamadı - GPT düzeltme ATLANACAK")
-            with open(txt_corrected_path, 'w', encoding='utf-8') as f:
-                f.write(raw_text)
-            return txt_corrected_path
-        
-        corrected_text = correct_transcript_with_gpt(raw_text, api_key)
+        corrected_text = correct_transcript_with_gpt(raw_text)
         
         with open(txt_corrected_path, 'w', encoding='utf-8') as f:
             f.write(corrected_text)
@@ -481,19 +473,6 @@ def process_video(video_info, output_dir):
 def main():
     clear_screen()
     print_header()
-    
-    # OpenAI API kontrolü
-    if not os.getenv('OPENAI_API_KEY'):
-        print("\n⚠️ UYARI: OPENAI_API_KEY bulunamadı!")
-        print("GPT düzeltme özelliği çalışmayacak.\n")
-        print("Çözüm:")
-        print("  export OPENAI_API_KEY='sk-proj-....'")
-        print("  # veya")
-        print("  setx OPENAI_API_KEY 'sk-proj-....' (Windows)\n")
-        
-        response = input("Devam etmek istiyor musunuz? (E/H): ").strip().upper()
-        if response != 'E':
-            return
     
     # Google Drive Authentication
     service = authenticate_google_drive()
